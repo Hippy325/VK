@@ -53,7 +53,9 @@ final class VKAuthorizeView: WKWebView {
 		let array = fragment.split(separator: "&").map({ $0.split(separator: "=").map({ String($0) }) })
 		var dictionary: [String:String] = [:]
 		array.forEach { (queryItems) in
-			dictionary[queryItems[0]] = queryItems[1]
+			if queryItems.count == 2 {
+				dictionary[queryItems[0]] = queryItems[1]
+			}
 		}
 		return dictionary
 	}
