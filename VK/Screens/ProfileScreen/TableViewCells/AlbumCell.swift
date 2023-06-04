@@ -26,7 +26,6 @@ final class AlbumCell: UITableViewCell {
 
 	private func setup() {
 
-
 		self.backgroundColor = .clear
 		selectionStyle = .none
 		backgroundViewCell.layer.cornerRadius = 17
@@ -89,5 +88,3 @@ final class AlbumCell: UITableViewCell {
 		titleView.updateAvatar(avatarImage: userImage)
 	}
 }
-
-

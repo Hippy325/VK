@@ -103,7 +103,7 @@ private extension ProfilePresenter {
 					education: user.occupation?.name
 				)
 				self.dataSourceModel.dataModel.albumsInfo.name = user.firstName + " " + user.lastName
-			case .failure(_):
+			case .failure:
 				print("huy tam")
 			}
 		}
@@ -128,7 +128,7 @@ private extension ProfilePresenter {
 						}
 					}
 				)
-			case .failure(_):
+			case .failure:
 				print("error")
 			}
 		}

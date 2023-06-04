@@ -27,7 +27,7 @@ final class FriendsViewController: UIViewController {
 
 		presenter.didLoad()
 	}
-	
+
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}

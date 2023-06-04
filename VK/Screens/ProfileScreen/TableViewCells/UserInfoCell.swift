@@ -12,7 +12,6 @@ final class UserInfoCell: UITableViewCell {
 	private let nameView = UILabel()
 	private let userInfoView = UILabel()
 
-
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		setup()
@@ -62,7 +61,6 @@ final class UserInfoCell: UITableViewCell {
 			nameView.bottomAnchor.constraint(equalTo: userInfoView.topAnchor, constant: 4)
 		])
 	}
-
 
 	func configure(userInfoModel: UserInfoCellModel) {
 		nameView.text = userInfoModel.name

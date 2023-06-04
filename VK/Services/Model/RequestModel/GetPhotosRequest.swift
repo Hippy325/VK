@@ -12,5 +12,5 @@ final class GetPhotosRequest: IAPIRequest {
 
 	var userIdPath: String = "owner_id"
 	var path: String = "photos.getAll"
-	var parameters: [String : String] = ["extended": "1"]
+	var parameters: [String: String] = ["extended": "1"]
 }

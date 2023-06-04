@@ -12,5 +12,5 @@ final class GetUsersFollowers: IAPIRequest {
 
 	var userIdPath: String = "user_ids"
 	var path: String = "users.getFollowers"
-	var parameters: [String : String] = ["fields": "photo_50"]
+	var parameters: [String: String] = ["fields": "photo_50"]
 }

@@ -11,7 +11,7 @@ import UIKit
 struct FriendsCellModel {
 	let count: Int?
 
-	let firstImage :UIImage?
+	let firstImage: UIImage?
 	let secondImage: UIImage?
 	let thriedImage: UIImage?
 

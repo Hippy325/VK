@@ -15,7 +15,7 @@ final class AuthorizePresenter: IAuthorizePresenter {
 	private let router: IAuthorizeRouter
 	private let tokenStorage: IMutableTokenStorage
 
-	init(router:IAuthorizeRouter, tokenStorage: IMutableTokenStorage) {
+	init(router: IAuthorizeRouter, tokenStorage: IMutableTokenStorage) {
 		self.router = router
 		self.tokenStorage = tokenStorage
 	}

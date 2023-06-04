@@ -40,7 +40,6 @@ final class Cancellable: ICancellable {
 		self.closure = closure
 	}
 
-
 	var closure: () -> Void
 
 	func cancel() {

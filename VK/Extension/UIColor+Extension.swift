@@ -13,4 +13,3 @@ extension UIColor {
 	static var whiteBlack = UIColor(named: "whiteBlack") ?? .black
 	static var textColor = UIColor(named: "textColor") ?? .white
 }
-

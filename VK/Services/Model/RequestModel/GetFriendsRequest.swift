@@ -12,5 +12,5 @@ final class GetFriendsRequest: IAPIRequest {
 
 	var userIdPath: String = "user_id"
 	var path: String = "friends.get"
-	var parameters: [String : String] = ["fields": "photo_50"]
+	var parameters: [String: String] = ["fields": "photo_50"]
 }

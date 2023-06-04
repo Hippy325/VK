@@ -67,7 +67,7 @@ final class FriendsCell: UITableViewCell {
 			firstImageView.rightAnchor.constraint(equalTo: secondImageView.leftAnchor, constant: 10),
 			firstImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
 			firstImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
-			firstImageView.widthAnchor.constraint(equalTo: thriedImageView.heightAnchor),
+			firstImageView.widthAnchor.constraint(equalTo: thriedImageView.heightAnchor)
 		])
 	}
 

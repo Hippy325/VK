@@ -124,7 +124,7 @@ private extension ProfileTableViewDataModel {
 		dataModel.avatarSetter { image in
 			cell.updateTitleAvatar(userImage: image)
 		}
-		
+
 		return cell
 	}
 }

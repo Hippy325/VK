@@ -36,11 +36,11 @@ final class VKAuthorizeView: WKWebView {
 		super.init(frame: .zero, configuration: .init())
 		setup()
 	}
-	
+
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-	
+
 	private func setup() {
 		navigationDelegate = self
 
@@ -49,9 +49,9 @@ final class VKAuthorizeView: WKWebView {
 		load(URLRequest(url: url))
 	}
 
-	private func splitFragmentURL(fragment: String) -> [String:String] {
+	private func splitFragmentURL(fragment: String) -> [String: String] {
 		let array = fragment.split(separator: "&").map({ $0.split(separator: "=").map({ String($0) }) })
-		var dictionary: [String:String] = [:]
+		var dictionary: [String: String] = [:]
 		array.forEach { (queryItems) in
 			if queryItems.count == 2 {
 				dictionary[queryItems[0]] = queryItems[1]

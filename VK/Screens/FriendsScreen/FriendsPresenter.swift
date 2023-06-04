@@ -75,7 +75,7 @@ final class FriendsPresenter: IFriendsPresenter {
 		case .Friends:
 			apiTransport.perform(GetFriendsRequest(), userId) { (result) in
 				switch result {
-				case .failure(_):
+				case .failure:
 					print("error")
 				case .success(let response):
 					self.tableViewDataModel.dataModel = response.response.items.map({ self.transform(friendsItem: $0) })
@@ -84,7 +84,7 @@ final class FriendsPresenter: IFriendsPresenter {
 		case .Followers:
 			apiTransport.perform(GetUsersFollowers(), userId) { (result) in
 				switch result {
-				case .failure(_):
+				case .failure:
 					print("error")
 				case .success(let response):
 					self.tableViewDataModel.dataModel = response.response.items.map({ self.transform(friendsItem: $0) })

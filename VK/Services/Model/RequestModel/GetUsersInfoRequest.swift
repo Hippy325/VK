@@ -12,5 +12,5 @@ final class GetUsersInfoRequest: IAPIRequest {
 
 	var userIdPath: String = "user_ids"
 	var path: String = "users.get"
-	var parameters: [String : String] = ["fields": "bdate, city, occupation, photo_200"]
+	var parameters: [String: String] = ["fields": "bdate, city, occupation, photo_200"]
 }

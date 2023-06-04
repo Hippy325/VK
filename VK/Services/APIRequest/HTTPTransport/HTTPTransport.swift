@@ -21,7 +21,7 @@ final class HTTPTransport: IHTTPTransport {
 		responseType: T.Type,
 		complition: @escaping (Result<T, Error>) -> Void
 	) -> ICancellable {
-		let task = session.dataTask(with: url) { [decoder] (data, response, error) in
+		let task = session.dataTask(with: url) { [decoder] (data, _, error) in
 			if let error = error {
 				return complition(.failure(error))
 			}
@@ -43,7 +43,7 @@ final class HTTPTransport: IHTTPTransport {
 
 	func loadData(url: URL, completion: @escaping (Result<Data, Error>) -> Void) -> ICancellable {
 
-		let task = session.dataTask(with: url) { (data, response, error) in
+		let task = session.dataTask(with: url) { (data, _, error) in
 			if let data = data {
 				completion(.success(data))
 			} else if let error = error {
@@ -59,8 +59,8 @@ final class HTTPTransport: IHTTPTransport {
 		urlRequest: URLRequest,
 		responseType: T.Type,
 		complition: @escaping (Result<T, Error>) -> Void
-	) -> ICancellable where T : Decodable {
-		let task = session.dataTask(with: urlRequest) { [decoder] (data, response, error) in
+	) -> ICancellable where T: Decodable {
+		let task = session.dataTask(with: urlRequest) { [decoder] (data, _, error) in
 			if let error = error {
 				return complition(.failure(error))
 			}

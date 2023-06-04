@@ -41,7 +41,7 @@ final class FriendsViewControllerAssembly: IFriendsViewControllerAssembly {
 			imageLoader: imageLoader,
 			userId: userId
 		)
-		
+
 		let viewController = FriendsViewController(presenter: presenter)
 		presenter.view = viewController
 

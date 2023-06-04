@@ -1,4 +1,3 @@
-
 import Foundation
 import UIKit
 
@@ -41,7 +40,7 @@ final class DI: IDI {
 		navigationController.viewControllers = [
 			authorizeViewControllerAssembly.assembly(navigationController: navigationController)
 		]
-		
+
 		return navigationController
 	}
 	private var mainNavigationControllerAssembly: IMainNavigationControllerAssembly = MainNavigationControllerAssembly()
