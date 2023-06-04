@@ -124,7 +124,9 @@ private extension ProfilePresenter {
 					thriedImage: nil,
 					loadImages: { imagesSetter in
 						self.imageLoader.loadImages(urlAbsolutes: urlAboluts) { (result) in
-							imagesSetter(try! result.get())
+							do {
+								imagesSetter(try result.get())
+							} catch {}
 						}
 					}
 				)

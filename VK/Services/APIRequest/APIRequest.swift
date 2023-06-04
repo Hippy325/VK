@@ -26,8 +26,10 @@ class APITransport: IAPITransport {
 	private let httpTransport: IHTTPTransport
 	private let tokenStorage: ITokenStorage
 
-	init(httpTransport: IHTTPTransport,
-		 tokenStorage: ITokenStorage) {
+	init(
+		httpTransport: IHTTPTransport,
+		tokenStorage: ITokenStorage
+	) {
 		self.httpTransport = httpTransport
 		self.tokenStorage = tokenStorage
 	}

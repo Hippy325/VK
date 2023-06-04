@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 enum TypeList {
-	case Friends
-	case Followers
+	case friends
+	case followers
 }
 
 protocol HeaderViewDelegate: AnyObject {
@@ -60,10 +60,10 @@ final class HeaderView: UITableViewHeaderFooterView {
 		switch segmentedControll.selectedSegmentIndex {
 		case 0:
 			titleView.text = "Мои друзья"
-			delegate?.updateTypeList(typeList: .Friends)
+			delegate?.updateTypeList(typeList: .friends)
 		case 1:
 			titleView.text = "Подписчики"
-			delegate?.updateTypeList(typeList: .Followers)
+			delegate?.updateTypeList(typeList: .followers)
 		default:
 			break
 		}

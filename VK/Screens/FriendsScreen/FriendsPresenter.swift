@@ -56,7 +56,7 @@ final class FriendsPresenter: IFriendsPresenter {
 	}
 
 	func didLoad() {
-		loadList(type: .Friends)
+		loadList(type: .friends)
 	}
 
 	private func transform(friendsItem: Item) -> FriendTableViewCellModel {
@@ -72,7 +72,7 @@ final class FriendsPresenter: IFriendsPresenter {
 
 	private func loadList(type: TypeList) {
 		switch type {
-		case .Friends:
+		case .friends:
 			apiTransport.perform(GetFriendsRequest(), userId) { (result) in
 				switch result {
 				case .failure:
@@ -81,7 +81,7 @@ final class FriendsPresenter: IFriendsPresenter {
 					self.tableViewDataModel.dataModel = response.response.items.map({ self.transform(friendsItem: $0) })
 				}
 			}
-		case .Followers:
+		case .followers:
 			apiTransport.perform(GetUsersFollowers(), userId) { (result) in
 				switch result {
 				case .failure:
