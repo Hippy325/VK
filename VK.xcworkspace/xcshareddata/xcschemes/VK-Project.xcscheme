@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4FBE085AC20FBEC6C25A91FE"
-               BuildableName = "VK.app"
-               BlueprintName = "VK"
-               ReferencedContainer = "container:VK.xcodeproj">
+               BlueprintIdentifier = "A5441D4A7F452CA3A236AD9A"
+               BuildableName = "Application.app"
+               BlueprintName = "Application"
+               ReferencedContainer = "container:Modules/Application/Applicatio.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,10 +44,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4FBE085AC20FBEC6C25A91FE"
-            BuildableName = "VK.app"
-            BlueprintName = "VK"
-            ReferencedContainer = "container:VK.xcodeproj">
+            BlueprintIdentifier = "A5441D4A7F452CA3A236AD9A"
+            BuildableName = "Application.app"
+            BlueprintName = "Application"
+            ReferencedContainer = "container:Modules/Application/Applicatio.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -61,10 +61,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4FBE085AC20FBEC6C25A91FE"
-            BuildableName = "VK.app"
-            BlueprintName = "VK"
-            ReferencedContainer = "container:VK.xcodeproj">
+            BlueprintIdentifier = "A5441D4A7F452CA3A236AD9A"
+            BuildableName = "Application.app"
+            BlueprintName = "Application"
+            ReferencedContainer = "container:Modules/Application/Applicatio.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

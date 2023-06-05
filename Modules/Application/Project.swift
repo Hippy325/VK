@@ -10,7 +10,7 @@ fi
 """
 
 let target = Target(
-	name: "VK",
+	name: "Application",
 	platform: .iOS,
 	product: .app,
 	bundleId: "garibyanTigran.App",
@@ -20,4 +20,4 @@ let target = Target(
 	actions: [.pre(script: swiftlintScript, name: "SwiftLint")]
 )
 
-let project = Project(name: "VK", targets: [target])
+let project = Project(name: "Applicatio", targets: [target])
