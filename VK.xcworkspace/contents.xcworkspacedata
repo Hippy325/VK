@@ -5,7 +5,31 @@
       location = "group:Modules"
       name = "Modules">
       <FileRef
-         location = "group:Application/Applicatio.xcodeproj">
+         location = "group:Application/Application.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:AuthorizeScreen/AuthorizeScreen.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:MessagesScreen/MessagesScreen.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Navigation/Navigation.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Services/Services.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Storage/Storage.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:TestUtilities/TestUtilities.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:UsersScreens/UsersScreens.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Utilities/Utilities.xcodeproj">
       </FileRef>
    </Group>
 </Workspace>
