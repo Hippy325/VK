@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Utilities
 
 public final class HTTPTransport: IHTTPTransport {
 	private let session: URLSession
@@ -81,5 +82,3 @@ public final class HTTPTransport: IHTTPTransport {
 		return task
 	}
 }
-
-extension URLSessionTask: ICancellable {}

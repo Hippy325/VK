@@ -7,6 +7,7 @@
 
 import Foundation
 import Storage
+import Utilities
 
 public protocol IAPITransport {
 	@discardableResult

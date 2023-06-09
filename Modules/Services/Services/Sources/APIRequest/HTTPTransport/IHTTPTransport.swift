@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Utilities
 
 public protocol IHTTPTransport {
 	@discardableResult

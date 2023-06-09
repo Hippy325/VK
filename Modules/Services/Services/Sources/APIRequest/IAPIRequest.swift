@@ -30,19 +30,3 @@ public extension IAPIRequest {
 		true
 	}
 }
-
-public protocol ICancellable: AnyObject {
-	func cancel()
-}
-
-public final class Cancellable: ICancellable {
-	internal init(_ closure: @escaping () -> Void) {
-		self.closure = closure
-	}
-
-	var closure: () -> Void
-
-	public func cancel() {
-		closure()
-	}
-}
