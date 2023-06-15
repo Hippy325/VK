@@ -75,34 +75,39 @@ final class FriendsCell: UITableViewCell {
 		if let count = friendsModel.count {
 			countView.text = "друзей \(count)"
 		}
+		let images = friendsModel.images
 
-//		thriedImageView.image = friendsModel.thriedImage
-//		secondImageView.image = friendsModel.secondImage
-//		firstImageView.image = friendsModel.firstImage
-
-		friendsModel.loadImages { images in
-
+		print(images.count)
+		switch images.count {
+		case 1:
+			self.thriedImageView.image = images[0]
+		case 2:
+			self.thriedImageView.image = images[0]
+			self.secondImageView.image = images[1]
+		case 3:
 			self.thriedImageView.image = images[0]
 			self.secondImageView.image = images[1]
 			self.firstImageView.image = images[2]
-
-			self.setupImages()
+		default:
+			break
 		}
+
+		self.setupImages()
 	}
 
 	private func setupImages() {
 		firstImageView.layer.masksToBounds = true
-		firstImageView.layer.cornerRadius = firstImageView.frame.height / 2
+		firstImageView.layer.cornerRadius = 27
 		firstImageView.layer.borderWidth = 5
 		firstImageView.layer.borderColor = UIColor.darkGrayBack.cgColor
 
 		secondImageView.layer.masksToBounds = true
-		secondImageView.layer.cornerRadius = firstImageView.frame.height / 2
+		secondImageView.layer.cornerRadius = 27
 		secondImageView.layer.borderWidth = 5
 		secondImageView.layer.borderColor = UIColor.darkGrayBack.cgColor
 
 		thriedImageView.layer.masksToBounds = true
-		thriedImageView.layer.cornerRadius = firstImageView.frame.height / 2
+		thriedImageView.layer.cornerRadius = 27
 		thriedImageView.layer.borderWidth = 5
 		thriedImageView.layer.borderColor = UIColor.darkGrayBack.cgColor
 	}

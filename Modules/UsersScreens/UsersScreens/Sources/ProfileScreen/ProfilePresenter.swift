@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import Storage
 import Services
 import UIKit
@@ -13,15 +14,28 @@ import UIKit
 protocol IProfilePresenter {
 	func didLoad()
 	func dataSource() -> ProfileTableViewDataModel
-}
 
-protocol ProfileView: AnyObject {
-	func reloadData()
-	func updateAvatar(image: UIImage)
-	func scrollViewDid()
+	var avatarPublisher: PassthroughSubject<UIImage, Never> { get }
+	var reloadData: PassthroughSubject<Void, Never> { get }
+	var scrollViewDid: PassthroughSubject<Void, Never> { get }
 }
 
 final class ProfilePresenter: IProfilePresenter {
+
+	var reloadData: PassthroughSubject<Void, Never> {
+		dataSourceModel.reloadData
+	}
+
+	var scrollViewDid: PassthroughSubject<Void, Never> {
+		dataSourceModel.scrollViewDid
+	}
+	var avatarPublisher: PassthroughSubject<UIImage, Never> = PassthroughSubject<UIImage, Never>()
+
+	private let apiTransportPublishers: IAPITransportPublishers
+	private let imageLoaderPulisher: IImageLoaderPublisher
+
+	private var store = Set<AnyCancellable>()
+
 	private let apiTransport: IAPITransport
 	private let imageLoader: IImageLoader
 	private let tokenStorage: ITokenStorage
@@ -30,9 +44,9 @@ final class ProfilePresenter: IProfilePresenter {
 
 	private let dataSourceModel = ProfileTableViewDataModel()
 
-	weak var view: ProfileView?
-
 	init(
+		imageLoaderPulisher: IImageLoaderPublisher,
+		apiTransportPublishers: IAPITransportPublishers,
 		apiTransport: IAPITransport,
 		imageLoader: IImageLoader,
 		tokenStorage: ITokenStorage,
@@ -44,30 +58,24 @@ final class ProfilePresenter: IProfilePresenter {
 		self.tokenStorage = tokenStorage
 		self.router = router
 		self.userId = userId
+		self.apiTransportPublishers = apiTransportPublishers
+		self.imageLoaderPulisher = imageLoaderPulisher
 	}
 
 	func didLoad() {
-		dataSourceModel.didScroll = { [weak self] in
-			guard let self = self else { return }
-			self.view?.scrollViewDid()
-		}
-
-		dataSourceModel.reloadData = { [weak self] in
-			guard let self = self else { return }
-			self.view?.reloadData()
-		}
-
-		dataSourceModel.didSelect = { [weak self] section in
-			guard let self = self else { return }
-			switch section {
-			case .friends:
-				self.router.goToFriendsScreen(userId: self.userId)
-			case .user:
-				print("user")
-			case .photo(let photo):
-				print(photo.date)
+		dataSourceModel.didSelect.receive(on: RunLoop.main)
+			.sink { [weak self] section in
+				guard let self = self else { return }
+				switch section {
+				case .friends:
+					self.router.goToFriendsScreen(userId: self.userId)
+				case .user:
+					print("user")
+				case .photo(let photo):
+					print(photo.date)
+				}
 			}
-		}
+			.store(in: &store)
 
 		loadUserInfo()
 		loadFriends()
@@ -81,61 +89,48 @@ final class ProfilePresenter: IProfilePresenter {
 
 private extension ProfilePresenter {
 	func loadAlbumsInfo() {
-		apiTransport.perform(GetPhotosRequest(), userId) { (result) in
-			switch result {
-			case .success(let response):
-				self.dataSourceModel.dataModel.albumsInfo = self.transform(photos: response.response)
-			case .failure(let error):
-				print(error)
+		apiTransportPublishers.perform(GetPhotosRequest(), userId)
+			.map { $0.response }
+			.sink { _ in }
+				receiveValue: { response in
+				self.dataSourceModel.dataModel.albumsInfo = self.transform(photos: response)
 			}
-		}
+			.store(in: &store)
 	}
 
 	func loadUserInfo() {
-		apiTransport.perform(GetUsersInfoRequest(), userId) { (result) in
-			switch result {
-			case .success(let data):
-				guard let user = data.response.first else {
-					return
-				}
+		apiTransportPublishers.perform(GetUsersInfoRequest(), userId)
+			.map { $0.response.first }
+			.sink { _ in }
+				receiveValue: { (user) in
+				guard let user = user else { return }
 				self.updateAvatarImage(url: user.avatarUrl)
 				self.dataSourceModel.dataModel.userInfo = UserInfoCellModel(
 					name: user.firstName + " " + user.lastName,
 					city: user.city?.title,
 					education: user.occupation?.name
 				)
-				self.dataSourceModel.dataModel.albumsInfo.name = user.firstName + " " + user.lastName
-			case .failure:
-				print("huy tam")
 			}
-		}
+			.store(in: &store)
 	}
 
 	func loadFriends() {
-		apiTransport.perform(GetFriendsRequest(), userId) { (result) in
-			switch result {
-			case .success(let response):
-				let items = response.response.items
+		apiTransportPublishers.perform(GetFriendsRequest(), userId)
+			.map { $0.response }
+			.sink { _ in }
+			receiveValue: { (response) in
+				let items = response.items
+				let urlAbsolutes = [items[0].photo, items[1].photo, items[2].photo]
 
-				let urlAboluts = [items[0].photo, items[1].photo, items[2].photo]
+				self.dataSourceModel.dataModel.friendsinfo.count = response.count
+				self.imageLoaderPulisher.loadImages(urlAbsolutes: urlAbsolutes)
+					.receive(on: DispatchQueue.main)
+					.replaceError(with: .custom)
+					.sink { self.dataSourceModel.dataModel.friendsinfo.images.append($0) }
+					.store(in: &self.store)
 
-				self.dataSourceModel.dataModel.friendsinfo = FriendsCellModel(
-					count: response.response.count,
-					firstImage: nil,
-					secondImage: nil,
-					thriedImage: nil,
-					loadImages: { imagesSetter in
-						self.imageLoader.loadImages(urlAbsolutes: urlAboluts) { (result) in
-							do {
-								imagesSetter(try result.get())
-							} catch {}
-						}
-					}
-				)
-			case .failure:
-				print("error")
 			}
-		}
+			.store(in: &store)
 	}
 
 	func transform(
@@ -145,26 +140,25 @@ private extension ProfilePresenter {
 			name: self.dataSourceModel.dataModel.albumsInfo.name,
 			count: photos.count,
 			photos: photos.items.map({ (photo) -> AlbumsCellModel.AlbumPhoto in
-				AlbumsCellModel.AlbumPhoto(date: photo.date, likes: photo.likes) { (imageSetter) in
-					self.imageLoader.loadImage(urlAbsolute: photo.sizes.last!.url) { (result) in
-						imageSetter(try? result.get())
-					}
+				AlbumsCellModel.AlbumPhoto(date: photo.date, likes: photo.likes) { [weak self] (imageSetter) in
+					guard let self = self else { return }
+					self.imageLoaderPulisher.loadImage(urlAbsolute: photo.sizes.last!.url)
+						.sink { _ in } receiveValue: { imageSetter($0) }
+						.store(in: &self.store)
 				}
 			})
 		)
 	}
 
 	func updateAvatarImage(url: String) {
-		dataSourceModel.dataModel.avatarSetter = { (imageSetter) in
-			self.imageLoader.loadImage(urlAbsolute: url) { (result) in
-				switch result {
-				case .success(let image):
-					self.view?.updateAvatar(image: image)
+		dataSourceModel.dataModel.avatarSetter = { [weak self] (imageSetter) in
+			guard let self = self else { return }
+			self.imageLoaderPulisher.loadImage(urlAbsolute: url)
+				.sink { _ in } receiveValue: { image in
 					imageSetter(image)
-				case .failure(let error):
-					print(error)
+					self.avatarPublisher.send(image)
 				}
-			}
+				.store(in: &self.store)
 		}
 	}
 }

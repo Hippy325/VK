@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import Combine
 import UIKit
+import Utilities
 
 final class ProfileTableViewDataModel: NSObject, UITableViewDataSource {
 	enum SectionType {
@@ -15,18 +17,18 @@ final class ProfileTableViewDataModel: NSObject, UITableViewDataSource {
 		case photo(_ albumPhoto: AlbumsCellModel.AlbumPhoto)
 	}
 
-	var didScroll: (() -> Void)?
-	var reloadData: (() -> Void)?
-	var didSelect: ((_ section: SectionType) -> Void)?
+	var reloadData: PassthroughSubject<Void, Never> = PassthroughSubject<Void, Never>()
+	var scrollViewDid: PassthroughSubject<Void, Never> = PassthroughSubject<Void, Never>()
+	var didSelect: PassthroughSubject<SectionType, Never> = PassthroughSubject<SectionType, Never>()
 
 	var dataModel = GeneralModel(
 		userInfo: UserInfoCellModel(name: "", city: "", education: ""),
-		friendsinfo: FriendsCellModel(count: nil, firstImage: nil, secondImage: nil, thriedImage: nil, loadImages: { _ in}),
+		friendsinfo: FriendsCellModel(count: nil, images: []),
 		albumsInfo: AlbumsCellModel(name: "", count: 0, photos: []),
 		avatarSetter: { _ in }
 	) {
 		didSet {
-			reloadData?()
+			reloadData.send()
 		}
 	}
 
@@ -86,17 +88,17 @@ extension ProfileTableViewDataModel: UITableViewDelegate {
 	}
 
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
-		didScroll?()
+		scrollViewDid.send()
 	}
 
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		switch indexPath.section {
 		case 0:
-			didSelect?(.user)
+			didSelect.send(.user)
 		case 1:
-			didSelect?(.friends)
+			didSelect.send(.friends)
 		case 2:
-			didSelect?(.photo(dataModel.albumsInfo.photos[indexPath.row]))
+			didSelect.send(.photo(dataModel.albumsInfo.photos[indexPath.row]))
 		default:
 			break
 		}

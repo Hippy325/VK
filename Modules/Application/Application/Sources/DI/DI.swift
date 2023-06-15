@@ -23,6 +23,11 @@ final class DI: IDI {
 
 	private lazy var httpTransport: IHTTPTransport = HTTPTransport(session: session, decoder: decoder)
 
+	private lazy var httpTransportPublishers: IHTTPTransportPublishers = HTTPTransportPublishers(
+		session: session,
+		decoder: decoder
+	)
+
 	private lazy var mutableTokenStorage: IMutableTokenStorage = MutableTokenStorage()
 
 	private var tokenStorage: ITokenStorage {
@@ -33,8 +38,20 @@ final class DI: IDI {
 		APITransport(httpTransport: httpTransport, tokenStorage: tokenStorage)
 	}()
 
+	private lazy var apiTransportPublishers: IAPITransportPublishers = {
+		APITransportPublishers(httpTransport: httpTransportPublishers, tokenStorage: tokenStorage)
+	}()
+
 	private var imageLoader: IImageLoader {
 		ImageLoader(httpTransport: httpTransport)
+	}
+
+	private var imageLoaderPulisher: IImageLoaderPublisher {
+		ImageLoaderPublisher(httpTransport: httpTransportPublishers)
+	}
+
+	private var imageLoaderPublisher: IImageLoaderPublisher {
+		ImageLoaderPublisher(httpTransport: httpTransportPublishers)
 	}
 
 	// MARK: - TabBar
@@ -85,6 +102,8 @@ final class DI: IDI {
 	}
 
 	private lazy var profileViewControllerAssembly: IProfileViewControllerAssembly = ProfileViewControllerAssembly(
+		imageLoaderPulisher: imageLoaderPublisher,
+		apiTransportPublishers: apiTransportPublishers,
 		apiTransport: apiTransport,
 		imageLoader: imageLoader,
 		tokenStorage: tokenStorage

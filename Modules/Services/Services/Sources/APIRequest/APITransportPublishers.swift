@@ -1,60 +1,53 @@
 //
-//  APIRequest.swift
-//  VK
+//  APIRequestPublishers.swift
+//  Services
 //
-//  Created by User on 29.04.2023.
+//  Created by User on 12.06.2023.
 //
 
 import Foundation
+import Combine
 import Storage
 import Utilities
 
-public protocol IAPITransport {
-	@discardableResult
+public protocol IAPITransportPublishers {
 	func perform<R: IAPIRequest>(
 		_ request: R,
-		_ userId: Int?,
-		completion: @escaping (Result<R.Response, Error>) -> Void
-	) -> ICancellable
+		_ userId: Int?
+	) -> AnyPublisher<R.Response, Error>
 }
 
-public class APITransport: IAPITransport {
-
+public class APITransportPublishers: IAPITransportPublishers {
 	enum Errors: String, Error {
 		case invalidRequest
 		case notHaveToken
 	}
 
-	private let httpTransport: IHTTPTransport
+	private let httpTransport: IHTTPTransportPublishers
 	private let tokenStorage: ITokenStorage
 
 	public init(
-		httpTransport: IHTTPTransport,
+		httpTransport: IHTTPTransportPublishers,
 		tokenStorage: ITokenStorage
 	) {
 		self.httpTransport = httpTransport
 		self.tokenStorage = tokenStorage
 	}
 
-	@discardableResult
-	public func perform<R: IAPIRequest>(
+	public func perform<R>(
 		_ request: R,
-		_ userId: Int? = nil,
-		completion: @escaping (Result<R.Response, Error>) -> Void
-	) -> ICancellable {
+		_ userId: Int?
+	) -> AnyPublisher<R.Response, Error> where R: IAPIRequest {
 		let nativeRequest: URLRequest
 
 		switch getNativeRequest(from: request, userId) {
-		case .success(let unwrappedRequest):
-			nativeRequest = unwrappedRequest
+		case .success(let request):
+			nativeRequest = request
 		case .failure(let error):
-			completion(.failure(error))
-			return Cancellable {}
+			return Fail(error: error).eraseToAnyPublisher()
 		}
 
-		return httpTransport.load(urlRequest: nativeRequest, responseType: R.Response.self) { result in
-			completion(result)
-		}
+		return httpTransport.loadPublisher(urlRequest: nativeRequest, responseType: R.Response.self)
 	}
 
 	private func getNativeRequest<R: IAPIRequest>(from request: R, _ userId: Int?) -> Result<URLRequest, Errors> {
@@ -87,7 +80,6 @@ public class APITransport: IAPITransport {
 			return .failure(Errors.invalidRequest)
 		}
 
-//		print(url.absoluteString)
 		var nativeRequest = URLRequest(url: url)
 		nativeRequest.allHTTPHeaderFields = request.headers
 		return .success(nativeRequest)

@@ -7,6 +7,7 @@
 
 import Foundation
 import Utilities
+import Combine
 import UIKit
 
 final class ProfileViewController: UIViewController {
@@ -15,6 +16,8 @@ final class ProfileViewController: UIViewController {
 
 	private let tableView = UITableView()
 	private let avatarView = UIImageView()
+
+	private var store = Set<AnyCancellable>()
 
 	init(presenter: IProfilePresenter) {
 		self.presenter = presenter
@@ -28,12 +31,11 @@ final class ProfileViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
 		view.backgroundColor = .whiteBlack
 
 		setupTableView()
+		sinkOnData()
 		presenter.didLoad()
-
 		setupNavigationBar()
 	}
 
@@ -93,23 +95,26 @@ final class ProfileViewController: UIViewController {
 	}
 }
 
-extension ProfileViewController: ProfileView {
-	func scrollViewDid() {
-		self.avatarView.layer.cornerRadius = self.avatarView.frame.height / 2
-	}
+private extension ProfileViewController {
+	func sinkOnData() {
+		presenter.avatarPublisher.map { $0 }
+			.receive(on: DispatchQueue.main)
+			.sink { (image) in
+				self.avatarView.image = image
+				self.avatarView.contentMode = .scaleAspectFill
+				self.avatarView.layer.masksToBounds = true
+				self.avatarView.layer.cornerRadius = self.avatarView.frame.height / 2
+			}
+			.store(in: &store)
 
-	func updateAvatar(image: UIImage) {
-		DispatchQueue.main.async {
-			self.avatarView.image = image
-			self.avatarView.contentMode = .scaleAspectFill
-			self.avatarView.layer.masksToBounds = true
-			self.avatarView.layer.cornerRadius = self.avatarView.frame.height / 2
-		}
-	}
+		presenter.reloadData
+			.receive(on: DispatchQueue.main)
+			.sink { self.tableView.reloadData() }
+			.store(in: &store)
 
-	func reloadData() {
-		DispatchQueue.main.async {
-			self.tableView.reloadData()
-		}
+		presenter.scrollViewDid
+			.receive(on: DispatchQueue.main)
+			.sink { self.avatarView.layer.cornerRadius = self.avatarView.frame.height / 2 }
+			.store(in: &store)
 	}
 }

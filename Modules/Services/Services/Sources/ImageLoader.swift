@@ -14,7 +14,7 @@ public protocol IImageLoader {
 		completion: @escaping (Result<UIImage, Error>) -> Void
 	)
 
-	func loadImages(
+	func loadImagers(
 		urlAbsolutes: [String],
 		complition: @escaping (Result<[UIImage], Swift.Error>) -> Void
 		)
@@ -73,7 +73,7 @@ public final class ImageLoader: IImageLoader {
 		}
 	}
 
-	public func loadImages(
+	public func loadImagers(
 		urlAbsolutes: [String],
 		complition: @escaping (Result<[UIImage], Swift.Error>) -> Void
 	) {

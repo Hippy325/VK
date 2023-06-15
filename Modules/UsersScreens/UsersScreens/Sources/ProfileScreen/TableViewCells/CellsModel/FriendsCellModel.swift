@@ -9,11 +9,6 @@ import Foundation
 import UIKit
 
 struct FriendsCellModel {
-	let count: Int?
-
-	let firstImage: UIImage?
-	let secondImage: UIImage?
-	let thriedImage: UIImage?
-
-	let loadImages: (_ imageSetter: @escaping ([UIImage?]) -> Void) -> Void
+	var count: Int?
+	var images: [UIImage]
 }

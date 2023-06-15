@@ -17,12 +17,17 @@ public protocol IProfileViewControllerAssembly: AnyObject {
 
 public final class ProfileViewControllerAssembly: IProfileViewControllerAssembly {
 
+	private let apiTransportPublishers: IAPITransportPublishers
+	private let imageLoaderPulisher: IImageLoaderPublisher
+
 	private let apiTransport: IAPITransport
 	private var imageLoader: IImageLoader
 	private let tokenStorage: ITokenStorage
 	public weak var friendsViewControllerAssembly: IFriendsViewControllerAssembly?
 
 	public init(
+		imageLoaderPulisher: IImageLoaderPublisher,
+		apiTransportPublishers: IAPITransportPublishers,
 		apiTransport: IAPITransport,
 		imageLoader: IImageLoader,
 		tokenStorage: ITokenStorage
@@ -30,6 +35,8 @@ public final class ProfileViewControllerAssembly: IProfileViewControllerAssembly
 		self.apiTransport = apiTransport
 		self.imageLoader = imageLoader
 		self.tokenStorage = tokenStorage
+		self.apiTransportPublishers = apiTransportPublishers
+		self.imageLoaderPulisher = imageLoaderPulisher
 	}
 
 	public func assembly(userId: Int?, navigationControler: UINavigationController?) -> UIViewController {
@@ -38,6 +45,8 @@ public final class ProfileViewControllerAssembly: IProfileViewControllerAssembly
 		router.friendsViewControllerAssembly = friendsViewControllerAssembly
 
 		let presenter = ProfilePresenter(
+			imageLoaderPulisher: imageLoaderPulisher,
+			apiTransportPublishers: apiTransportPublishers,
 			apiTransport: apiTransport,
 			imageLoader: imageLoader,
 			tokenStorage: tokenStorage,
@@ -46,7 +55,6 @@ public final class ProfileViewControllerAssembly: IProfileViewControllerAssembly
 		)
 
 		let viewController = ProfileViewController(presenter: presenter)
-		presenter.view = viewController
 
 		return viewController
 	}
