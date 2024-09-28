@@ -1,14 +1,5 @@
 import ProjectDescription
 
- let swiftlintScript = """
- export PATH="$PATH:/opt/homebrew/bin"
- if which swiftlint > /dev/null; then
-  swiftlint
- else
-  echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
- fi
- """
-
 extension TargetDependency {
 	public static func services() -> Self {
 		return .project(target: "Services", path: "../Services")
@@ -46,7 +37,6 @@ extension Target {
 				"\(name)/Resources/**",
 				"\(name)/Sources/**/*.storyboard"
 			],
-			actions: [.pre(script: swiftlintScript, name: "Swiftlint")],
 			dependencies: dependencies,
 			coreDataModels: coreDataModels
 		)
@@ -79,7 +69,6 @@ extension Target {
 			deploymentTarget: .iOS(targetVersion: "14.0", devices: .iphone),
 			infoPlist: "\(name)/Tests/Info.plist",
 			sources: ["\(name)/Tests/**/*.swift"],
-			actions: [.pre(script: swiftlintScript, name: "Swiftlint")],
 			dependencies: dependency + dependencies
 		)
 	}
@@ -96,7 +85,6 @@ extension Target {
 			deploymentTarget: .iOS(targetVersion: "14.0", devices: .iphone),
 			infoPlist: "\(name)/Mocks/Info.plist",
 			sources: ["\(name)/Mocks/**/*.swift"],
-			actions: [.pre(script: swiftlintScript, name: "Swiftlint")],
 			dependencies:
 				[
 					.target(name: "\(name)"),

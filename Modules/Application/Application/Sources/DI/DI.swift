@@ -4,8 +4,6 @@
 //
 //  Created by User on 02.05.2023.
 //
-// swiftlint:disable type_name
-//
 
 import Foundation
 import MessagesScreen

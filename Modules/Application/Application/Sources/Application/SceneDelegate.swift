@@ -3,7 +3,6 @@
 //  VK
 //
 //  Created by User on 22.04.2023.
-// swiftlint:disable identifier_name
 //
 import UIKit
 
