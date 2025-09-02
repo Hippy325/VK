@@ -7,11 +7,11 @@
 
 import Foundation
 
-public struct UsersResponse: Decodable {
+public struct UsersResponse: Decodable, Sendable {
 	public var response: [UserInfo]
 }
 
-public struct UserInfo: Decodable {
+public struct UserInfo: Decodable, Sendable {
 	public var firstName: String
 	public var lastName: String
 	public var dateBirth: String?
@@ -29,10 +29,10 @@ public struct UserInfo: Decodable {
 	}
 }
 
-public struct City: Decodable {
+public struct City: Decodable, Sendable {
 	public var title: String
 }
 
-public struct Occupation: Decodable {
+public struct Occupation: Decodable, Sendable {
 	public var name: String
 }

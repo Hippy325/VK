@@ -10,9 +10,9 @@ import Foundation
 public final class GetFriendsRequest: IAPIRequest {
 	public typealias Response = FriendsResponse
 
-	public var userIdPath: String = "user_id"
-	public var path: String = "friends.get"
-	public var parameters: [String: String] = ["fields": "photo_50"]
+	public let userIdPath: String = "user_id"
+	public let path: String = "friends.get"
+	public let parameters: [String: String] = ["fields": "photo_50"]
 
 	public init() {}
 }

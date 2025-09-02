@@ -9,11 +9,13 @@ import Foundation
 import Utilities
 import UIKit
 
-public protocol ITabBarControllerAssembly {
+@MainActor
+public protocol ITabBarControllerAssembly: Sendable {
 	func assembly() -> UITabBarController
 }
 
-public protocol IChaildNavigationControllerAssembly {
+@MainActor
+public protocol IChaildNavigationControllerAssembly: Sendable {
 	func assembly() -> UINavigationController
 }
 

@@ -10,7 +10,7 @@ import UsersScreens
 import UIKit
 
 public final class FriendsNavigationControllerAssembly: IChaildNavigationControllerAssembly {
-
+    
 	let navigationControllerAssembly: INavigationControllerAssembly
 	let friendsViewControllerAssembly: IFriendsViewControllerAssembly
 
@@ -22,7 +22,7 @@ public final class FriendsNavigationControllerAssembly: IChaildNavigationControl
 		self.friendsViewControllerAssembly = friendsViewControllerAssembly
 	}
 
-	public func assembly() -> UINavigationController {
+    public func assembly() -> UINavigationController {
 		let navigationController = navigationControllerAssembly.assembly()
 		navigationController.viewControllers = [
 			friendsViewControllerAssembly.assembly(userId: nil, navigationControler: navigationController)

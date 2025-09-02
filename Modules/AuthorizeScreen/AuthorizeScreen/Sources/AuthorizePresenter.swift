@@ -9,7 +9,8 @@ import Foundation
 import Storage
 import Services
 
-protocol IAuthorizePresenter {
+@MainActor
+protocol IAuthorizePresenter: Sendable {
 	func goToTabBarScreen()
 }
 

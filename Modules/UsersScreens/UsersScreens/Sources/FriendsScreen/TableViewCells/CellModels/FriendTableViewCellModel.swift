@@ -8,8 +8,8 @@
 import Foundation
 import UIKit
 
-struct FriendTableViewCellModel {
+struct FriendTableViewCellModel: Sendable {
 	let userId: Int
 	let name: String
-	let avatarSetter: (_ imageSetter: @escaping (UIImage?) -> Void) -> Void
+    let avatarSetter: @Sendable (_ imageSetter: @escaping @Sendable (UIImage?) -> Void) -> Void
 }

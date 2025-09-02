@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+
 final class AlbumCell: UITableViewCell {
 
 	private let backgroundViewCell = UIView()
@@ -71,11 +72,13 @@ final class AlbumCell: UITableViewCell {
 	}
 
 	func configure(albumModel: AlbumsCellModel.AlbumPhoto) {
-		albumModel.loadImages { image in
-			DispatchQueue.main.async {
-				self.avatarView.image = image
-			}
-		}
+        Task {
+            await albumModel.loadImages { image in
+                DispatchQueue.main.async {
+                    self.avatarView.image = image
+                }
+            }
+        }
 		titleView.configureDate(date: albumModel.date)
 		bottomView.setupLikes(likes: albumModel.likes)
 	}

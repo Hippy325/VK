@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-protocol IFriendsRouter {
+@MainActor
+protocol IFriendsRouter: Sendable {
 	func goToProfileFriendScreen(userId: Int)
 }
 

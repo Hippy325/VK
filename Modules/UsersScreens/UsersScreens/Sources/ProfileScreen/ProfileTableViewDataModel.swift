@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-final class ProfileTableViewDataModel: NSObject, UITableViewDataSource {
+@MainActor
+final class ProfileTableViewDataModel: NSObject, UITableViewDataSource, @unchecked Sendable {
 	enum SectionType {
 		case friends
 		case user
@@ -121,9 +122,13 @@ private extension ProfileTableViewDataModel {
 		cell.configure(albumModel: dataModel.albumsInfo.photos[indexPath.row])
 		cell.updateNameTitle(name: dataModel.userInfo.name)
 
-		dataModel.avatarSetter { image in
-			cell.updateTitleAvatar(userImage: image)
-		}
+        Task {
+            await dataModel.avatarSetter { image in
+                DispatchQueue.main.async {
+                    cell.updateTitleAvatar(userImage: image)
+                }
+            }
+        }
 
 		return cell
 	}

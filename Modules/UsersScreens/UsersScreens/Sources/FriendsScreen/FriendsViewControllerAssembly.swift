@@ -10,7 +10,8 @@ import Storage
 import Services
 import UIKit
 
-public protocol IFriendsViewControllerAssembly: AnyObject {
+@MainActor
+public protocol IFriendsViewControllerAssembly: AnyObject, Sendable {
 	func assembly(userId: Int?, navigationControler: UINavigationController) -> UIViewController
 }
 
@@ -32,7 +33,7 @@ public final class FriendsViewControllerAssembly: IFriendsViewControllerAssembly
 		self.imageLoader = imageLoader
 	}
 
-	public func assembly(userId: Int?, navigationControler: UINavigationController) -> UIViewController {
+    public func assembly(userId: Int?, navigationControler: UINavigationController) -> UIViewController {
 		let router = FriendsRouter(profileViewControllerAssembly: profileViewControllerAssembly)
 		router.navigationController = navigationControler
 

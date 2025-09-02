@@ -8,14 +8,15 @@
 import Foundation
 import UIKit
 
+@MainActor
 final class FriendsTableViewDataModel: NSObject, UITableViewDataSource, UITableViewDelegate {
-	var reloadData: (() -> Void)?
+    var reloadData: (() -> Void)?
 	var didSelect: ((_ userId: Int) -> Void)?
 	weak var headerDelegate: HeaderViewDelegate?
 
 	var dataModel: [FriendTableViewCellModel] = [] {
 		didSet {
-			reloadData?()
+            reloadData?()
 		}
 	}
 

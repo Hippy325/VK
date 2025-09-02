@@ -12,8 +12,8 @@ protocol IMessagesListViewControllerAssembly {
 	func assembly() -> UIViewController
 }
 
-final class MessagesListViewControllerAssembly: IMessagesListViewControllerAssembly {
-	func assembly() -> UIViewController {
+final class MessagesListViewControllerAssembly: @preconcurrency IMessagesListViewControllerAssembly {
+    @MainActor func assembly() -> UIViewController {
 		let router = MessagesListRouter()
 
 		let presenter = MessagesListPresenter(router: router)

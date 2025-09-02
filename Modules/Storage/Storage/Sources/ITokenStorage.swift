@@ -7,7 +7,7 @@
 
 import Foundation
 
-public  protocol ITokenStorage {
+public  protocol ITokenStorage: Sendable {
 	var token: String? { get}
 }
 

@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-public protocol INavigationControllerAssembly {
+@MainActor
+public protocol INavigationControllerAssembly: Sendable {
 	func assembly() -> UINavigationController
 }
 

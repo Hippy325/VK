@@ -8,9 +8,9 @@
 import Foundation
 import UIKit
 
-struct GeneralModel {
+struct GeneralModel: @unchecked Sendable {
 	var userInfo: UserInfoCellModel
 	var friendsinfo: FriendsCellModel
 	var albumsInfo: AlbumsCellModel
-	var avatarSetter: (_ imageSetter: @escaping (UIImage?) -> Void) -> Void
+    var avatarSetter: (_ imageSetter: @escaping @Sendable (UIImage?) -> Void) async -> Void
 }

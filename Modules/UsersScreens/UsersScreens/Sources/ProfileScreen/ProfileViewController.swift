@@ -94,22 +94,18 @@ final class ProfileViewController: UIViewController {
 }
 
 extension ProfileViewController: ProfileView {
-	func scrollViewDid() {
-		self.avatarView.layer.cornerRadius = self.avatarView.frame.height / 2
+    func scrollViewDid() {
+        self.avatarView.layer.cornerRadius = self.avatarView.frame.height / 2
 	}
 
-	func updateAvatar(image: UIImage) {
-		DispatchQueue.main.async {
-			self.avatarView.image = image
-			self.avatarView.contentMode = .scaleAspectFill
-			self.avatarView.layer.masksToBounds = true
-			self.avatarView.layer.cornerRadius = self.avatarView.frame.height / 2
-		}
+    func updateAvatar(image: UIImage) {
+        self.avatarView.image = image
+        self.avatarView.contentMode = .scaleAspectFill
+        self.avatarView.layer.masksToBounds = true
+        self.avatarView.layer.cornerRadius = self.avatarView.frame.height / 2
 	}
 
-	func reloadData() {
-		DispatchQueue.main.async {
-			self.tableView.reloadData()
-		}
+    func reloadData() {
+        self.tableView.reloadData()
 	}
 }

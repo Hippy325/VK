@@ -54,7 +54,7 @@ final class FriendsViewController: UIViewController {
 		navigationItem.scrollEdgeAppearance = appearance
 	}
 
-	private func setup() {
+    private func setup() {
 		view.backgroundColor = .darkGrayBack
 
 		view.addSubview(tableView)
@@ -62,7 +62,7 @@ final class FriendsViewController: UIViewController {
 		tableView.register(HeaderView.self, forHeaderFooterViewReuseIdentifier: "HeaderView")
 		tableView.register(FriendTableViewCell.self, forCellReuseIdentifier: "FriendTableViewCell")
 
-		tableView.dataSource = presenter.tableViewModel()
+        tableView.dataSource = presenter.tableViewModel()
 		tableView.delegate = presenter.tableViewModel()
 		tableView.separatorStyle = .none
 
@@ -83,9 +83,7 @@ final class FriendsViewController: UIViewController {
 }
 
 extension FriendsViewController: IFriendsView {
-	func reloadData() {
-		DispatchQueue.main.async {
-			self.tableView.reloadData()
-		}
+     func reloadData() {
+         self.tableView.reloadData()
 	}
 }

@@ -75,19 +75,16 @@ final class FriendsCell: UITableViewCell {
 		if let count = friendsModel.count {
 			countView.text = "друзей \(count)"
 		}
-
-//		thriedImageView.image = friendsModel.thriedImage
-//		secondImageView.image = friendsModel.secondImage
-//		firstImageView.image = friendsModel.firstImage
-
-		friendsModel.loadImages { images in
-
-			self.thriedImageView.image = images[0]
-			self.secondImageView.image = images[1]
-			self.firstImageView.image = images[2]
-
-			self.setupImages()
-		}
+        Task {
+            await friendsModel.loadImages { images in
+                DispatchQueue.main.async {
+                    self.thriedImageView.image = images[0]
+                    self.secondImageView.image = images[1]
+                    self.firstImageView.image = images[2]
+                    self.setupImages()
+                }
+            }
+        }
 	}
 
 	private func setupImages() {

@@ -9,5 +9,5 @@ import Foundation
 import UIKit
 
 public extension UIImage {
-	static var custom = UIImage(named: "custom")!
+    static let custom = UIImage(named: "custom")!
 }

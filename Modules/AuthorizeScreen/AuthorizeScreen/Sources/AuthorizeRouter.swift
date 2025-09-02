@@ -9,7 +9,8 @@ import Foundation
 import Navigation
 import UIKit
 
-protocol IAuthorizeRouter {
+@MainActor
+protocol IAuthorizeRouter: Sendable {
 	var navigationController: UINavigationController? { get set }
 	func goToTabBarScreen()
 	func presentAlertAuthorized()

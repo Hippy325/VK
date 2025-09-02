@@ -7,28 +7,28 @@
 
 import Foundation
 
-public struct PhotosResponse: Decodable {
+public struct PhotosResponse: Decodable, Sendable {
 	public var response: PhotosInfo
 }
 
-public struct PhotosInfo: Decodable {
+public struct PhotosInfo: Decodable, Sendable {
 	public var count: Int
 	public var items: [Photo]
 }
 
-public struct Photo: Decodable {
+public struct Photo: Decodable, Sendable {
 	public var date: Int
 	public var sizes: [PhotoSize]
 	public var text: String
 	public var likes: PhotoLikes
 }
 
-public struct PhotoSize: Decodable {
+public struct PhotoSize: Decodable, Sendable {
 	var type: String
 	public var url: String
 }
 
-public struct PhotoLikes: Decodable {
+public struct PhotoLikes: Decodable, Sendable {
 	public var count: Int
 	public var userLike: Int
 

@@ -8,7 +8,8 @@
 import Foundation
 import WebKit
 
-public protocol IAuthorizeDelegate: AnyObject {
+@MainActor
+public protocol IAuthorizeDelegate: AnyObject, Sendable {
 	func user(token: String)
 }
 
@@ -27,8 +28,6 @@ public final class VKAuthorizeView: WKWebView {
 		]
 		return urlComponents
 	}
-
-	private var isAuthorize = true
 
 	public weak var delegate: IAuthorizeDelegate?
 
@@ -66,7 +65,7 @@ extension VKAuthorizeView: WKNavigationDelegate {
 	public func webView(
 		_ webView: WKWebView,
 		decidePolicyFor navigationResponse: WKNavigationResponse,
-		decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void
+        decisionHandler: @escaping @MainActor (WKNavigationResponsePolicy) -> Void
 	) {
 		guard
 			let url = navigationResponse.response.url,

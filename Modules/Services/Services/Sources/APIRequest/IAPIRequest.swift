@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol IAPIRequest {
+public protocol IAPIRequest: Sendable {
 	associatedtype Response: Decodable
 
 	var path: String { get }

@@ -14,12 +14,11 @@ import UsersScreens
 import AuthorizeScreen
 import UIKit
 
+
 final class DI: IDI {
 	// MARK: - Common
 	private lazy var decoder: JSONDecoder = .init()
 	private lazy var session: URLSession = .shared
-
-	private lazy var httpTransport: IHTTPTransport = HTTPTransport(session: session, decoder: decoder)
 
 	private lazy var mutableTokenStorage: IMutableTokenStorage = MutableTokenStorage()
 
@@ -28,11 +27,11 @@ final class DI: IDI {
 	}
 
 	private lazy var apiTransport: IAPITransport = {
-		APITransport(httpTransport: httpTransport, tokenStorage: tokenStorage)
+        APITransport(session: session, tokenStorage: tokenStorage, decoder: decoder)
 	}()
 
 	private var imageLoader: IImageLoader {
-		ImageLoader(httpTransport: httpTransport)
+        ImageLoader(session: session)
 	}
 
 	// MARK: - TabBar
@@ -48,7 +47,7 @@ final class DI: IDI {
 	// MARK: - Navigation
 	private var navigationControllerAssembly: INavigationControllerAssembly = NavigationControllerAssembly()
 
-	var mainNavigationController: UINavigationController {
+    var mainNavigationController: UINavigationController {
 		let navigationController = mainNavigationControllerAssembly.assembly()
 		navigationController.viewControllers = [
 			authorizeViewControllerAssembly.assembly(navigationController: navigationController)

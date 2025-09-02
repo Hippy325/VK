@@ -13,6 +13,7 @@ enum TypeList {
 	case followers
 }
 
+@MainActor
 protocol HeaderViewDelegate: AnyObject {
 	func updateTypeList(typeList: TypeList)
 }

@@ -9,12 +9,12 @@ import Foundation
 import Services
 import UIKit
 
-struct AlbumsCellModel {
-
-	struct AlbumPhoto {
+struct AlbumsCellModel: Sendable {
+    struct AlbumPhoto: Sendable {
 		let date: Int
 		let likes: PhotoLikes
-		let loadImages: (_ imagesSetter: @escaping (UIImage?) -> Void) -> Void
+        
+        let loadImages: @Sendable (_ imagesSetter: @escaping @Sendable (UIImage?) -> Void) async -> Void
 	}
 
 	var name: String

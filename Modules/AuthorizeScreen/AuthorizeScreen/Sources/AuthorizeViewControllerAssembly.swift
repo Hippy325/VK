@@ -11,7 +11,8 @@ import Storage
 import Services
 import Navigation
 
-public protocol IAuthorizeViewControllerAssembly {
+@MainActor
+public protocol IAuthorizeViewControllerAssembly: Sendable {
 	func assembly(navigationController: UINavigationController) -> UIViewController
 }
 

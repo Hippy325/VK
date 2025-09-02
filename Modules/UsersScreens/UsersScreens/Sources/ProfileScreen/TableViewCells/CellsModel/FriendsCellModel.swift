@@ -8,12 +8,11 @@
 import Foundation
 import UIKit
 
-struct FriendsCellModel {
+struct FriendsCellModel: Sendable {
 	let count: Int?
-
 	let firstImage: UIImage?
 	let secondImage: UIImage?
 	let thriedImage: UIImage?
 
-	let loadImages: (_ imageSetter: @escaping ([UIImage?]) -> Void) -> Void
+    let loadImages: @Sendable (_ imageSetter: @escaping @Sendable ([UIImage?]) -> Void) async -> Void
 }

@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-protocol IDI: AnyObject {
+@MainActor
+protocol IDI: AnyObject, Sendable {
 //	// MARK: - Common
 //	var session: URLSession { get }
 //	var decoder: JSONDecoder { get }

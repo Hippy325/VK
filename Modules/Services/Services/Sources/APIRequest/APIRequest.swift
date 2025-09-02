@@ -9,55 +9,44 @@ import Foundation
 import Storage
 import Utilities
 
-public protocol IAPITransport {
-	@discardableResult
-	func perform<R: IAPIRequest>(
-		_ request: R,
-		_ userId: Int?,
-		completion: @escaping (Result<R.Response, Error>) -> Void
-	) -> ICancellable
+public protocol IAPITransport: Sendable {
+    @discardableResult
+    func perform<R: IAPIRequest>(
+        _ request: R,
+        _ userId: Int?
+    ) async throws -> R.Response
 }
 
-public class APITransport: IAPITransport {
-
-	enum Errors: String, Error {
-		case invalidRequest
-		case notHaveToken
-	}
-
-	private let httpTransport: IHTTPTransport
+public final class APITransport: IAPITransport {
+    private let session: URLSession
 	private let tokenStorage: ITokenStorage
+    private let decoder: JSONDecoder
 
 	public init(
-		httpTransport: IHTTPTransport,
-		tokenStorage: ITokenStorage
+        session: URLSession = .shared,
+		tokenStorage: ITokenStorage,
+        decoder: JSONDecoder = .init()
 	) {
-		self.httpTransport = httpTransport
+		self.session = session
 		self.tokenStorage = tokenStorage
+        self.decoder = decoder
 	}
 
-	@discardableResult
 	public func perform<R: IAPIRequest>(
 		_ request: R,
-		_ userId: Int? = nil,
-		completion: @escaping (Result<R.Response, Error>) -> Void
-	) -> ICancellable {
+		_ userId: Int? = nil
+	) async throws -> R.Response {
 		let nativeRequest: URLRequest
-
-		switch getNativeRequest(from: request, userId) {
-		case .success(let unwrappedRequest):
-			nativeRequest = unwrappedRequest
-		case .failure(let error):
-			completion(.failure(error))
-			return Cancellable {}
-		}
-
-		return httpTransport.load(urlRequest: nativeRequest, responseType: R.Response.self) { result in
-			completion(result)
-		}
+        nativeRequest = try getNativeRequest(from: request, userId)
+        let response = try await session.data(for: nativeRequest)
+        let decodeResponse = try decoder.decode(R.Response.self, from: response.0)
+        return decodeResponse
 	}
 
-	private func getNativeRequest<R: IAPIRequest>(from request: R, _ userId: Int?) -> Result<URLRequest, Errors> {
+	private func getNativeRequest<R: IAPIRequest>(
+        from request: R,
+        _ userId: Int?
+    ) throws -> URLRequest {
 		var urlCopmonents = URLComponents()
 		urlCopmonents.scheme = "https"
 		urlCopmonents.host = "api.vk.com"
@@ -71,7 +60,7 @@ public class APITransport: IAPITransport {
 			if let token = tokenStorage.token {
 				urlCopmonents.queryItems?.append(URLQueryItem(name: "access_token", value: token))
 			} else {
-				return .failure(Errors.notHaveToken)
+                throw Errors.notHaveToken
 			}
 		}
 
@@ -84,12 +73,10 @@ public class APITransport: IAPITransport {
 		}
 
 		guard let url = urlCopmonents.url else {
-			return .failure(Errors.invalidRequest)
+            throw Errors.invalidRequest
 		}
-
-//		print(url.absoluteString)
 		var nativeRequest = URLRequest(url: url)
 		nativeRequest.allHTTPHeaderFields = request.headers
-		return .success(nativeRequest)
+		return nativeRequest
 	}
 }

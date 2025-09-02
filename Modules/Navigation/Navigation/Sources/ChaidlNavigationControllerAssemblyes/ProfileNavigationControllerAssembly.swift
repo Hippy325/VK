@@ -21,7 +21,7 @@ public final class ProfileNavigationControllerAssembly: IChaildNavigationControl
 		self.profileViewControllerAssembly = profileViewControllerAssembly
 	}
 
-	public func assembly() -> UINavigationController {
+    public func assembly() -> UINavigationController {
 		let navigationController = navigationControllerAssembly.assembly()
 		navigationController.navigationBar.prefersLargeTitles = true
 		navigationController.viewControllers = [
