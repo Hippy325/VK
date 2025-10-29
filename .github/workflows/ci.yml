@@ -11,28 +11,31 @@ jobs:
     runs-on: macos-14
 
     steps:
+      # --- 1. Клонирование репозитория ---
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # --- 2. Выбор версии Xcode ---
       - name: Select Xcode 16.1
         run: sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
 
       - name: Verify Xcode version
         run: xcodebuild -version
 
+      # --- 3. Установка Tuist через официальный скрипт ---
       - name: Install Tuist
         run: curl -Ls https://install.tuist.io | bash
 
-        - name: Generate project with Tuist
-        run: tuist generate
-
-      - name: Clean old Tuist artifacts (optional but recommended)
+      # --- 4. Очистка старых артефактов (опционально) ---
+      - name: Clean old Tuist artifacts
         run: |
           rm -rf VK.xcworkspace VK.xcodeproj DerivedData .tuist-cache
 
+      # --- 5. Генерация проекта через Tuist ---
       - name: Generate project with Tuist
         run: tuist generate
 
+      # --- 6. Сборка проекта ---
       - name: Build
         run: |
           xcodebuild clean build \
@@ -43,7 +46,7 @@ jobs:
             -derivedDataPath DerivedData \
             CODE_SIGNING_ALLOWED=NO
 
-      # Раскомментируйте для тестов
+      # --- 7. (опционально) Запуск тестов ---
       # - name: Run tests
       #   run: |
       #     xcodebuild test \
