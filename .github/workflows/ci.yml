@@ -20,11 +20,15 @@ jobs:
       - name: Verify Xcode version
         run: xcodebuild -version
 
+      - name: Install Tuist via Homebrew
+        run: brew install tuist/tap/tuist
+
+      - name: Clean old Tuist artifacts (optional but recommended)
+        run: |
+          rm -rf VK.xcworkspace VK.xcodeproj DerivedData .tuist-cache
+
       - name: Generate project with Tuist
-        uses: tuist/tuist-action@0.13.0
-        with:
-          command: generate
-          # arguments: '--force'  # Раскомментируйте, если нужно принудительно перегенерировать
+        run: tuist generate
 
       - name: Build
         run: |
@@ -36,7 +40,7 @@ jobs:
             -derivedDataPath DerivedData \
             CODE_SIGNING_ALLOWED=NO
 
-      # Раскомментируйте, когда будете готовы запускать тесты
+      # Раскомментируйте для тестов
       # - name: Run tests
       #   run: |
       #     xcodebuild test \
