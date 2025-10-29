@@ -20,31 +20,30 @@ jobs:
       - name: Verify Xcode version
         run: xcodebuild -version
 
-      - name: Install Tuist
-        uses: tuist/actions/install-tuist@v2
-        
-      - name: Generate project with Tuist (like make open)
-        run: |
-          rm -rf VK.xcworkspace VK.xcodeproj DerivedData
-          tuist generate
+      - name: Generate project with Tuist
+        uses: tuist/tuist-action@0.13.0
+        with:
+          command: generate
+          # arguments: '--force'  # Раскомментируйте, если нужно принудительно перегенерировать
 
       - name: Build
         run: |
           xcodebuild clean build \
-            -workspace VK.xcworkspace \ 
-            -scheme VK \  # Укажите вашу схему (из Tuist)
+            -workspace VK.xcworkspace \
+            -scheme VK \
             -sdk iphoneos \
             -configuration Debug \
             -derivedDataPath DerivedData \
             CODE_SIGNING_ALLOWED=NO
 
-#      - name: Run tests
-#        run: |
-#          xcodebuild test \
-#            -workspace VK.xcworkspace \
-#            -scheme VK \  # Схема с тестами
-#            -sdk iphonesimulator \
-#            -destination 'platform=iOS Simulator,name=iPhone 15,OS=18.1' \  # Адаптируйте под iOS 18 для Xcode 16.1
-#            -configuration Debug \
-#            -derivedDataPath DerivedData \
-#            CODE_SIGNING_ALLOWED=NO
+      # Раскомментируйте, когда будете готовы запускать тесты
+      # - name: Run tests
+      #   run: |
+      #     xcodebuild test \
+      #       -workspace VK.xcworkspace \
+      #       -scheme VK \
+      #       -sdk iphonesimulator \
+      #       -destination 'platform=iOS Simulator,name=iPhone 15,OS=18.1' \
+      #       -configuration Debug \
+      #       -derivedDataPath DerivedData \
+      #       CODE_SIGNING_ALLOWED=NO
