@@ -20,8 +20,11 @@ jobs:
       - name: Verify Xcode version
         run: xcodebuild -version
 
-      - name: Install Tuist via Homebrew
-        run: brew install tuist/tap/tuist
+      - name: Install Tuist
+        run: curl -Ls https://install.tuist.io | bash
+
+        - name: Generate project with Tuist
+        run: tuist generate
 
       - name: Clean old Tuist artifacts (optional but recommended)
         run: |
